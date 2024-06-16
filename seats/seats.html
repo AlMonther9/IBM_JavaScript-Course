@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* CSS for styling the seats */
+        .seating-chart {
+            display: grid;
+            grid-template-columns: repeat(3, 70px);
+            gap: 10px;
+            justify-content: center;
+        }
+        .seat {
+            width: 70px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .booked {
+            background-color: #FF0000; /* Red */
+            cursor: not-allowed;
+            color: white; /* Set the text color to white for booked seats */
+        }
+        .available {
+            background-color: #7FFF00; /* Light Green */
+        }
+        .select-button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px;
+            background-color: #007BFF; /* Blue */
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Movie Theater Seating</h2>
+    <div id="seating-chart" class="seating-chart">
+        <div class="seat available" onclick="bookSeat(0, 0)">A1</div>
+        <div class="seat available" onclick="bookSeat(0, 1)">A2</div>
+        <div class="seat available" onclick="bookSeat(0, 2)">A3</div>
+        <div class="seat available" onclick="bookSeat(1, 0)">B1</div>
+        <div class="seat available" onclick="bookSeat(1, 1)">B2</div>
+        <div class="seat available" onclick="bookSeat(1, 2)">B3</div>
+        <div class="seat available" onclick="bookSeat(2, 0)">C1</div>
+        <div class="seat available" onclick="bookSeat(2, 1)">C2</div>
+        <div class="seat available" onclick="bookSeat(2, 2)">C3</div>
+    </div>
+    <button class="select-button" onclick="bookRandomSeat()">Select Random Seat</button>
+    <script>
+        // JavaScript for booking seats
+        const theaterSeats = [
+            ['X', 'O', 'X'],
+            ['O', 'X', 'O'],
+            ['X', 'O', 'X']
+        ];
+        function bookSeat(row, col) {
+            if (theaterSeats[row][col] === 'O') {
+                theaterSeats[row][col] = 'X';
+                updateSeatStatus(row, col, 'booked');
+                alert(`Seat ${String.fromCharCode(65 + row)}${col + 1} is booked.`);
+            } else {
+                alert(`Seat ${String.fromCharCode(65 + row)}${col + 1} is already taken.`);
+            }
+        }
+        function updateSeatStatus(row, col, status) {
+            const seats = document.getElementsByClassName('seat');
+            const index = row * 3 + col;
+            seats[index].classList.remove('available', 'booked');
+            seats[index].classList.add(status);
+        }
+        function bookRandomSeat() {
+            const availableSeats = [];
+            for (let row = 0; row < theaterSeats.length; row++) {
+                for (let col = 0; col < theaterSeats[row].length; col++) {
+                    if (theaterSeats[row][col] === 'O') {
+                        availableSeats.push({ row, col });
+                    }
+                }
+            }
+            if (availableSeats.length > 0) {
+                const randomIndex = Math.floor(Math.random() * availableSeats.length);
+                const { row, col } = availableSeats[randomIndex];
+                bookSeat(row, col);
+            } else {
+                alert('All seats are already booked.');
+            }
+        }
+    </script>
+</body>
+</html>
